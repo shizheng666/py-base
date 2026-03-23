@@ -17,6 +17,8 @@
 - 增加注册和登录接口
 - 在任务接口里加入用户隔离
 - 统一错误响应格式
+- 使用 JWT 表示登录后的用户身份
+- 在依赖函数里解析 `Authorization: Bearer <token>`
 
 ## 与前端对照
 
@@ -28,3 +30,19 @@
 - JWT 方案
 - 密码哈希方案
 - `pydantic-settings` 或等价配置方案
+
+## 代码阅读建议
+
+本章重点阅读这些文件：
+
+- [user.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/models/user.py)
+- [security.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/core/security.py)
+- [dependencies.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/api/dependencies.py)
+- [auth_service.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/services/auth_service.py)
+
+阅读顺序建议：
+
+1. 先看 schema，理解接口收什么、返回什么
+2. 再看 security，理解密码和 token 如何处理
+3. 再看 auth service，理解注册和登录业务逻辑
+4. 最后看 route，理解 FastAPI 如何把这些层串起来

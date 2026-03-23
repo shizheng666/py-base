@@ -8,6 +8,8 @@ from pydantic import BaseModel  # `BaseModel` 是 Pydantic 的核心基类，负
 from pydantic import ConfigDict  # `ConfigDict` 用来声明模型行为，比如能否从 ORM 对象读取字段。
 from pydantic import Field  # `Field` 用来补充字段约束和描述，比如最小长度、默认值。
 
+from app.schemas.user import UserRead
+
 
 class TaskCreate(BaseModel):
     """Payload for creating a task."""
@@ -25,7 +27,7 @@ class TaskRead(BaseModel):
     description: str
     priority: int
     status: str
+    owner: UserRead
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
-

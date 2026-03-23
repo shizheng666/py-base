@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     app_name: str = Field(default="Task Collaboration API")
     database_url: str = Field(default="sqlite+pysqlite:///:memory:")
     redis_url: str = Field(default="redis://localhost:6379/0")
+    jwt_secret_key: str = Field(default="dev-secret-key-change-me-at-least-32")
     debug: bool = Field(default=True)
 
     model_config = SettingsConfigDict(
@@ -33,4 +34,3 @@ def get_settings() -> Settings:
     """
 
     return Settings()
-

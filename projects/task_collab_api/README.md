@@ -5,11 +5,15 @@
 ## 当前已实现
 
 - `GET /health`
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /me`
 - `GET /tasks`
 - `POST /tasks`
 - SQLite 内存数据库
 - SQLAlchemy 2.x ORM 模型
 - Pydantic 请求与响应模型
+- JWT 认证
 - pytest + FastAPI TestClient 测试
 
 ## 后续扩展方向

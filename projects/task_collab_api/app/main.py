@@ -8,6 +8,8 @@ from app.api.routes import register_routes
 from app.core.settings import get_settings
 from app.db.session import create_session_factory
 from app.models.base import Base
+from app.models.task import Task  # 显式导入模型的目的不是直接使用变量，而是确保 SQLAlchemy 在建表前已经注册了表定义。
+from app.models.user import User  # 同上，导入 User 让 `Base.metadata.create_all()` 知道要创建 `users` 表。
 
 
 def create_app() -> FastAPI:
@@ -15,6 +17,7 @@ def create_app() -> FastAPI:
 
     settings = get_settings()
     app = FastAPI(title=settings.app_name, debug=settings.debug)
+    app.state.settings = settings
 
     session_factory = create_session_factory(settings.database_url)
     app.state.session_factory = session_factory
@@ -28,4 +31,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-

@@ -312,6 +312,41 @@ Celery 常把 Redis 当作 broker 或 backend 使用。
 - 为主项目提供统一运行环境
 - 为后续部署和团队协作打基础
 
+## 16. `PyJWT`
+
+### 这个库干嘛的
+
+`PyJWT` 用来创建和校验 JWT 令牌。用户登录成功后，后端可以签发一个 token，前端之后把它放进请求头里，服务端就能识别“这是谁”。
+
+### 常见 import
+
+```python
+import jwt
+```
+
+### 这个 import 干嘛的
+
+- `jwt.encode(...)`
+  - 生成签名后的 JWT 字符串
+- `jwt.decode(...)`
+  - 解码并校验 JWT
+- `jwt.PyJWTError`
+  - 捕获令牌过期、签名不合法等异常
+
+### 常见使用方式
+
+```python
+import jwt
+
+token = jwt.encode({"sub": "alice@example.com"}, "secret-key", algorithm="HS256")
+payload = jwt.decode(token, "secret-key", algorithms=["HS256"])
+```
+
+### 在主项目里落在哪
+
+- [security.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/core/security.py)
+- [dependencies.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/api/dependencies.py)
+
 ## 怎么看懂 `from ... import ...`
 
 很多前端开发者刚转 Python 时，会把这类语句看得很碎。其实可以按下面方式理解：

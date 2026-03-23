@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.115,<1.0",
+    "PyJWT>=2.10,<3.0",
     "sqlalchemy>=2.0,<3.0",
     "pydantic>=2.10,<3.0",
     "pydantic-settings>=2.6,<3.0",
@@ -26,4 +27,3 @@ testpaths = [
 
 [tool.ruff]
 line-length = 100
-
