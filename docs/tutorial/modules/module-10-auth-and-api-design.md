@@ -35,6 +35,8 @@
 
 本章重点阅读这些文件：
 
+- [auth_flow.py](C:/Users/admin/Desktop/study/py_base/examples/module_10_auth/auth_flow.py)
+- [test_auth_flow.py](C:/Users/admin/Desktop/study/py_base/examples/module_10_auth/test_auth_flow.py)
 - [user.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/models/user.py)
 - [security.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/core/security.py)
 - [dependencies.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/api/dependencies.py)
@@ -42,7 +44,15 @@
 
 阅读顺序建议：
 
-1. 先看 schema，理解接口收什么、返回什么
-2. 再看 security，理解密码和 token 如何处理
-3. 再看 auth service，理解注册和登录业务逻辑
-4. 最后看 route，理解 FastAPI 如何把这些层串起来
+1. 先看 example 里的 `auth_flow.py`，理解注册、密码哈希、token 生成和 token 解析的最小原理
+2. 再看 example 里的 `test_auth_flow.py`，观察“成功登录 / 错误密码 / 非法 token”这三类核心行为
+3. 再看主项目里的 schema 和 security，理解真实接口收什么、返回什么，以及密码和 token 如何处理
+4. 再看 auth service，理解注册和登录业务逻辑
+5. 最后看 route 和 dependencies，理解 FastAPI 如何把这些层串起来
+
+## Example 运行方式
+
+```powershell
+uv run pytest examples/module_10_auth -q
+uv run python examples/module_10_auth/demo_auth_flow.py
+```

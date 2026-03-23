@@ -1,3 +1,5 @@
+import json
+
 from fastapi.testclient import TestClient
 
 from app.main import create_app
@@ -103,6 +105,105 @@ def test_create_and_list_tasks_for_the_current_user() -> None:
     assert len(tasks) == 1
     assert tasks[0]["title"] == "Write the learning note"
     assert tasks[0]["owner"]["email"] == "alice@example.com"
+
+
+def test_create_task_writes_a_background_notification_log(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    notification_log = tmp_path / "notifications.jsonl"
+    monkeypatch.setenv("NOTIFICATION_LOG_PATH", str(notification_log))
+
+    client = TestClient(create_app())
+
+    register_response = client.post(
+        "/auth/register",
+        json={
+            "email": "alice@example.com",
+            "password": "super-secret-password",
+            "full_name": "Alice Chen",
+        },
+    )
+    assert register_response.status_code == 201
+
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": "alice@example.com",
+            "password": "super-secret-password",
+        },
+    )
+    token = login_response.json()["access_token"]
+
+    create_response = client.post(
+        "/tasks",
+        json={
+            "title": "Ship async notification",
+            "description": "Explain how BackgroundTasks works",
+            "priority": 1,
+        },
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert create_response.status_code == 201
+    assert notification_log.exists()
+
+    lines = notification_log.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 1
+
+    log_entry = json.loads(lines[0])
+    assert log_entry["event"] == "task.created"
+    assert log_entry["task_title"] == "Ship async notification"
+    assert log_entry["user_email"] == "alice@example.com"
+
+
+def test_background_notification_log_appends_instead_of_overwriting(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    notification_log = tmp_path / "notifications.jsonl"
+    monkeypatch.setenv("NOTIFICATION_LOG_PATH", str(notification_log))
+
+    client = TestClient(create_app())
+
+    register_response = client.post(
+        "/auth/register",
+        json={
+            "email": "alice@example.com",
+            "password": "super-secret-password",
+            "full_name": "Alice Chen",
+        },
+    )
+    assert register_response.status_code == 201
+
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": "alice@example.com",
+            "password": "super-secret-password",
+        },
+    )
+    token = login_response.json()["access_token"]
+
+    for task_title in ["First async task", "Second async task"]:
+        create_response = client.post(
+            "/tasks",
+            json={
+                "title": task_title,
+                "description": "append behavior",
+                "priority": 2,
+            },
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        assert create_response.status_code == 201
+
+    lines = notification_log.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 2
+
+    first_entry = json.loads(lines[0])
+    second_entry = json.loads(lines[1])
+    assert first_entry["task_title"] == "First async task"
+    assert second_entry["task_title"] == "Second async task"
 
 
 def test_create_task_requires_authentication() -> None:

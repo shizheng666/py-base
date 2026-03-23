@@ -346,6 +346,68 @@ payload = jwt.decode(token, "secret-key", algorithms=["HS256"])
 
 - [security.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/core/security.py)
 - [dependencies.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/api/dependencies.py)
+- 最小示例：[auth_flow.py](C:/Users/admin/Desktop/study/py_base/examples/module_10_auth/auth_flow.py)
+
+## 17. `BackgroundTasks`
+
+### 这个能力干嘛的
+
+`BackgroundTasks` 来自 FastAPI，用来在返回 HTTP 响应之后，再执行一些轻量后台操作。
+它很适合教学和轻量场景，比如：
+
+- 写通知日志
+- 记录审计事件
+- 触发轻量 webhook
+
+### 常见 import
+
+```python
+from fastapi import BackgroundTasks
+```
+
+### 这个 from/import 干嘛的
+
+- `fastapi` 是框架库
+- `BackgroundTasks` 是其中提供的一个后台任务容器
+- 你把一个函数和参数交给它，它会在响应发出后帮你执行
+
+### 常见使用方式
+
+```python
+from fastapi import BackgroundTasks
+
+
+def write_log(message: str) -> None:
+    print(message)
+
+
+def create_item(background_tasks: BackgroundTasks) -> dict[str, str]:
+    background_tasks.add_task(write_log, "item created")
+    return {"status": "accepted"}
+```
+
+### 它和 `async def` 的关系
+
+- `BackgroundTasks` 不等于“分布式异步任务”
+- `async def` 是定义协程函数的语法
+- `BackgroundTasks` 是“请求返回后再执行副作用”的调度方式
+
+所以它们解决的问题并不完全相同：
+
+- `async def` 更偏并发模型和 I/O 等待
+- `BackgroundTasks` 更偏请求生命周期里的延后处理
+
+### 它和 Celery/Redis 的区别
+
+- `BackgroundTasks` 运行在当前 API 进程里
+- Celery/Redis 通常代表独立任务队列和独立 worker
+- 前者更轻，后者更适合真正的生产级异步任务
+
+### 在主项目里落在哪
+
+- [routes.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/api/routes.py)
+- [notification_service.py](C:/Users/admin/Desktop/study/py_base/projects/task_collab_api/app/services/notification_service.py)
+- 最小示例：[background_tasks_example.py](C:/Users/admin/Desktop/study/py_base/examples/module_11_background_tasks/background_tasks_example.py)
 
 ## 怎么看懂 `from ... import ...`
 

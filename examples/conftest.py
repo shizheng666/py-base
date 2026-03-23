@@ -14,11 +14,17 @@ EXAMPLE_DIRS = [
     Path(__file__).parent / "module_01_cli",
     Path(__file__).parent / "module_02_data_model",
     Path(__file__).parent / "module_03_typing",
+    Path(__file__).parent / "module_04_oop_protocols",
+    Path(__file__).parent / "module_05_standard_library",
     Path(__file__).parent / "module_06_validation",
+    Path(__file__).parent / "module_07_project_structure",
+    Path(__file__).parent / "module_08_sqlalchemy",
+    Path(__file__).parent / "module_09_fastapi_core",
+    Path(__file__).parent / "module_10_auth",
+    Path(__file__).parent / "module_11_background_tasks",
 ]
 
 for directory in EXAMPLE_DIRS:
     directory_as_text = str(directory)
     if directory_as_text not in sys.path:
         sys.path.insert(0, directory_as_text)
-

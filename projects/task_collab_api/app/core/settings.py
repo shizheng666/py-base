@@ -1,6 +1,8 @@
 """Project settings.
 
 这个文件负责集中管理配置，而不是把数据库地址或环境变量散落在各处。
+新增异步通知之后，通知日志路径也放在这里统一管理，
+这样路由层和服务层都不需要硬编码文件位置。
 """
 
 from __future__ import annotations
@@ -17,6 +19,9 @@ class Settings(BaseSettings):
     database_url: str = Field(default="sqlite+pysqlite:///:memory:")
     redis_url: str = Field(default="redis://localhost:6379/0")
     jwt_secret_key: str = Field(default="dev-secret-key-change-me-at-least-32")
+    notification_log_path: str = Field(
+        default="projects/task_collab_api/runtime/notifications.jsonl",
+    )
     debug: bool = Field(default=True)
 
     model_config = SettingsConfigDict(
