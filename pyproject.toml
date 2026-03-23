@@ -1,0 +1,29 @@
+[project]
+name = "python-fullstack-roadmap"
+version = "0.1.0"
+description = "Python 3.10+ full-stack learning roadmap for experienced frontend developers."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "sqlalchemy>=2.0,<3.0",
+    "pydantic>=2.10,<3.0",
+    "pydantic-settings>=2.6,<3.0",
+    "uvicorn>=0.34,<1.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28,<1.0",
+    "pytest>=8.3,<9.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "examples",
+    "projects/task_collab_api/tests",
+]
+
+[tool.ruff]
+line-length = 100
+
